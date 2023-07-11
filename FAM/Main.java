@@ -2,6 +2,8 @@ package FAM;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello World");
+        MapaHash cache = new MapaHash();
+        cache.simular("FAM\\Enderecos.txt");
+        cache.imprimirResultados();
     }
 }
