@@ -3,6 +3,7 @@ package FAM;
 public class Noh {
 
     private int endereco;
+    private int valor;
     private Noh proximo;
 
     public int getEndereco() {
@@ -11,6 +12,14 @@ public class Noh {
 
     public void setEndereco(int endereco) {
         this.endereco = endereco;
+    }
+
+    public int getValor() {
+        return valor;
+    }
+
+    public void setValor(int valor) {
+        this.valor = valor;
     }
 
     public Noh getProximo() {

@@ -5,10 +5,14 @@ import java.util.Random;
 public class Cache {
     private Noh inicio;
     private Random random;
+    private int tamanhoMaximo;
+    private Memory memory;
 
-    public Cache() {
+    public Cache(int tamanhoMaximo) {
         this.inicio = null;
+        this.tamanhoMaximo = tamanhoMaximo;
         this.random = new Random();
+        this.memory = new Memory(32);
     }
 
     public boolean contem(int endereco) {
@@ -27,17 +31,38 @@ public class Cache {
         if (inicio == null) {
             inicio = novo;
         } else {
-            int IndiceRandomico = random.nextInt(getTamanho() + 1);
-            if (IndiceRandomico == 0) {
+            // Gerar aleatoriamente a posição de substituição
+            int posicao = random.nextInt(tamanho() + 1);
+
+            if (posicao == 0) {
                 novo.setProximo(inicio);
                 inicio = novo;
             } else {
+                Noh anterior = null;
                 Noh atual = inicio;
-                for (int i = 1; i < IndiceRandomico; i++) {
+                for (int i = 0; i < posicao; i++) {
+                    anterior = atual;
                     atual = atual.getProximo();
                 }
-                novo.setProximo(atual.getProximo());
-                atual.setProximo(novo);
+                anterior.setProximo(novo);
+                novo.setProximo(atual);
+            }
+
+            if (tamanho() > tamanhoMaximo) {
+                // Remover o endereço mais antigo se o cache estiver cheio
+                Noh anterior = null;
+                Noh atual = inicio;
+                while (atual.getProximo() != null) {
+                    anterior = atual;
+                    atual = atual.getProximo();
+                }
+                if (anterior != null) {
+                    anterior.setProximo(null);
+                } else {
+                    inicio = null;
+                }
+                int valor = memory.leitura(endereco);
+                novo.setValor(valor);
             }
         }
     }
@@ -52,13 +77,13 @@ public class Cache {
         System.out.println();
     }
 
-    private int getTamanho() {
-        int contador = 0;
+    private int tamanho() {
+        int tamanho = 0;
         Noh atual = inicio;
         while (atual != null) {
-            contador++;
+            tamanho++;
             atual = atual.getProximo();
         }
-        return contador;
+        return tamanho;
     }
 }

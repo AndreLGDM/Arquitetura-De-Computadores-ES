@@ -12,7 +12,7 @@ public class MapaHash {
     private int leituras;
 
     public MapaHash() {
-        this.cache = new Cache();
+        this.cache = new Cache(8);
         this.memory = new Memory(32);
         this.hits = 0;
         this.misses = 0;
@@ -42,16 +42,13 @@ public class MapaHash {
                 int endereco = Integer.parseInt(linhas.trim(), 2);
 
                 if (cache.contem(endereco)) {
-                    System.out.println("Cache hit");
                     this.hits++;
                 } else {
-                    System.out.println("Cache miss");
                     this.misses++;
                     cache.substituir(endereco);
                 }
 
                 this.leituras++;
-                cache.imprimir();
             }
         } catch (IOException e) {
             e.printStackTrace();
